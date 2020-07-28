@@ -6,9 +6,36 @@ class Category(models.Model):
     name = models.CharField(max_length=128, default="")
 
 
+class RuleManager(models.Manager):
+    def get_queryset(self):
+        return super(RuleManager, self).get_queryset().order_by("order")
+
+
 class Rule(models.Model):
     name = models.CharField(max_length=128, default="")
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    order = models.IntegerField(default=-1)
+    objects = RuleManager()
+
+    def save(self, *args, **kwargs):
+        if self.order == -1:
+            self.order = len(Rule.objects.all())
+        super(Rule, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        succeeding_rules = Rule.objects.filter(order__gt=self.order)
+        for rule in succeeding_rules.iterator():
+            rule.order = rule.order - 1
+            rule.save()
+        super(Rule, self).delete(*args, **kwargs)
+
+    def insert(self, position):
+        succeeding_rules = Rule.objects.filter(order__gte=position)
+        for rule in succeeding_rules.iterator():
+            rule.order = rule.order + 1
+            rule.save()
+        self.order = position
+        self.save()
 
 
 class Location(models.Model):
