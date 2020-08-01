@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "colorfield",
     "adminsortable",
     "factory.apps.FactoryConfig",
     'django.contrib.admin',

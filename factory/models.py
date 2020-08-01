@@ -1,7 +1,7 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 from adminsortable.models import SortableMixin
 from adminsortable.fields import SortableForeignKey
+from colorfield.fields import ColorField
 
 
 class CategoryManager(models.Manager):
@@ -10,9 +10,9 @@ class CategoryManager(models.Manager):
 
 
 class Category(models.Model):
-    type = models.CharField(max_length=1, choices=[(1, "BOS"), (2, "QUOS")], default=1)
+    type = models.CharField(max_length=1, choices=[("B", "BOS"), ("Q", "QUOS")], default="B")
     name = models.CharField(max_length=128, default="")
-    color = models.CharField(max_length=1, choices=[(1, "Red"), (2, "")])
+    color = ColorField(default="#FFFFFF")
     objects = CategoryManager()
 
     class Meta:
