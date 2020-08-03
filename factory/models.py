@@ -1,22 +1,40 @@
-from django.db import models
-from adminsortable.models import SortableMixin
 from adminsortable.fields import SortableForeignKey
+from adminsortable.models import SortableMixin
 from colorfield.fields import ColorField
+from django.db import models
 
 
 class CategoryManager(models.Manager):
     def get_queryset(self):
-        return super(CategoryManager, self).get_queryset().order_by("type")
+        return super(CategoryManager, self).get_queryset().order_by("type", "order")
+
+    @staticmethod
+    def fix_order():
+        categories = Category.objects.all()
+        counter = 1
+
+        for category in categories:
+            rules = category.rule_set.all()
+            for rule in rules:
+                rule.order = counter
+                counter = counter + 1
+                rule.save()
 
 
-class Category(models.Model):
+class Category(SortableMixin):
     type = models.CharField(max_length=1, choices=[("B", "BOS"), ("Q", "QUOS")], default="B")
     name = models.CharField(max_length=128, default="")
     color = ColorField(default="#FFFFFF")
+    order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
     objects = CategoryManager()
 
     class Meta:
         verbose_name_plural = "Categories"
+        ordering = ["order"]
+
+    def save(self, *args, **kwargs):
+        super(Category, self).save(*args, **kwargs)
+        Category.objects.fix_order()
 
     def type_display(self):
         return self.get_type_display()
@@ -33,17 +51,12 @@ class RuleManager(models.Manager):
 class Rule(SortableMixin):
     name = models.CharField(max_length=128, default="")
     category = SortableForeignKey(Category, on_delete=models.CASCADE)
-    order = models.IntegerField(default=-1, editable=False, db_index=True)
+    order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
     is_important = models.BooleanField(default=False)
     objects = RuleManager()
 
     class Meta:
         ordering = ["order"]
-
-    def save(self, *args, **kwargs):
-        if self.order == -1:
-            self.order = len(Rule.objects.all())
-        super(Rule, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         succeeding_rules = Rule.objects.filter(order__gt=self.order)
@@ -54,9 +67,6 @@ class Rule(SortableMixin):
 
     def __str__(self):
         return f"{self.order}. {self.name}"
-
-    def __unicode__(self):
-        return self.name
 
 
 class Location(models.Model):

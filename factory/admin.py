@@ -1,17 +1,7 @@
+from adminsortable.admin import SortableAdmin
 from django.contrib import admin
+
 from factory.models import Category, Rule, Location, Settings, Employee, Contribution
-from adminsortable.admin import NonSortableParentAdmin, SortableStackedInline
-
-
-class RuleInline(SortableStackedInline):
-    model = Rule
-    extra = 1
-
-
-@admin.register(Category)
-class CategoryAdmin(NonSortableParentAdmin):
-    inlines = [RuleInline]
-    list_display = ["type_display", "name"]
 
 
 @admin.register(Settings)
@@ -33,3 +23,5 @@ class ContributionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Location)
+admin.site.register(Category, SortableAdmin)
+admin.site.register(Rule, SortableAdmin)
