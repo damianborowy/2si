@@ -11,13 +11,17 @@ class CategoryManager(models.Manager):
     @staticmethod
     def fix_order():
         categories = Category.objects.all()
-        counter = 1
+        rule_counter = 1
+        category_counter = 1
 
         for category in categories:
+            category.order = category_counter
+            category_counter = category_counter + 1
+
             rules = category.rule_set.all()
             for rule in rules:
-                rule.order = counter
-                counter = counter + 1
+                rule.order = rule_counter
+                rule_counter = rule_counter + 1
                 rule.save()
 
 
@@ -58,6 +62,9 @@ class Rule(SortableMixin):
     class Meta:
         ordering = ["order"]
 
+    def type(self):
+        return self.category.get_type_display()
+
     def delete(self, *args, **kwargs):
         succeeding_rules = Rule.objects.filter(order__gt=self.order)
         for rule in succeeding_rules.iterator():
@@ -88,6 +95,7 @@ class Employee(models.Model):
     name = models.CharField(max_length=64, default="")
     surname = models.CharField(max_length=64, default="")
     code = models.CharField(max_length=64, default="")
+    role = models.CharField(max_length=1, choices=[("W", "Worker"), ("M", "Line manager")], default="W")
 
     def __str__(self):
         return f"{self.name} {self.surname}"
@@ -99,5 +107,17 @@ class Contribution(models.Model):
     rule = models.ForeignKey(Rule, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True)
 
+    def type(self):
+        return self.rule.category.get_type_display()
+
     def __str__(self):
-        return f"{self.date.year}/{self.date.month}/{self.date.day} - {self.employee}"
+        return f"{self.date} - {self.employee}"
+
+
+class Vacation(models.Model):
+    start_date = models.DateField()
+    end_date = models.DateField()
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.employee} {self.start_date} - {self.end_date}"
