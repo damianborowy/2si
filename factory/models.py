@@ -4,25 +4,26 @@ from colorfield.fields import ColorField
 from django.db import models
 
 
+def fix_order():
+    categories = Category.objects.all()
+    rule_counter = 1
+    category_counter = 1
+
+    for category in categories:
+        category.order = category_counter
+        category_counter = category_counter + 1
+        category.save()
+
+        rules = category.rule_set.all()
+        for rule in rules:
+            rule.order = rule_counter
+            rule_counter = rule_counter + 1
+            rule.save()
+
+
 class CategoryManager(models.Manager):
     def get_queryset(self):
         return super(CategoryManager, self).get_queryset().order_by("type", "order")
-
-    @staticmethod
-    def fix_order():
-        categories = Category.objects.all()
-        rule_counter = 1
-        category_counter = 1
-
-        for category in categories:
-            category.order = category_counter
-            category_counter = category_counter + 1
-
-            rules = category.rule_set.all()
-            for rule in rules:
-                rule.order = rule_counter
-                rule_counter = rule_counter + 1
-                rule.save()
 
 
 class Category(SortableMixin):
@@ -35,10 +36,6 @@ class Category(SortableMixin):
     class Meta:
         verbose_name_plural = "Categories"
         ordering = ["order"]
-
-    def save(self, *args, **kwargs):
-        super(Category, self).save(*args, **kwargs)
-        Category.objects.fix_order()
 
     def type_display(self):
         return self.get_type_display()
@@ -64,13 +61,6 @@ class Rule(SortableMixin):
 
     def type(self):
         return self.category.get_type_display()
-
-    def delete(self, *args, **kwargs):
-        succeeding_rules = Rule.objects.filter(order__gt=self.order)
-        for rule in succeeding_rules.iterator():
-            rule.order = rule.order - 1
-            rule.save()
-        super(Rule, self).delete(*args, **kwargs)
 
     def __str__(self):
         return f"{self.order}. {self.name}"

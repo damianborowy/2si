@@ -1,7 +1,7 @@
 from adminsortable.admin import SortableAdmin
 from django.contrib import admin
 
-from factory.models import Category, Rule, Location, Settings, Employee, Contribution, Vacation
+from factory.models import Category, Rule, Location, Settings, Employee, Contribution, Vacation, fix_order
 
 
 @admin.register(Settings)
@@ -31,10 +31,32 @@ class VacationAdmin(admin.ModelAdmin):
 class CategoryAdmin(SortableAdmin):
     list_display = ["type", "order", "name"]
 
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        fix_order()
+
+    def delete_queryset(self, request, queryset):
+        super().delete_queryset(request, queryset)
+        fix_order()
+
+    def after_sorting(self):
+        fix_order()
+
 
 @admin.register(Rule)
 class RuleAdmin(SortableAdmin):
     list_display = ["type", "order", "name"]
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        fix_order()
+
+    def delete_queryset(self, request, queryset):
+        super().delete_queryset(request, queryset)
+        fix_order()
+
+    def after_sorting(self):
+        fix_order()
 
 
 admin.site.register(Location)
