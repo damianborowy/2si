@@ -1,0 +1,9 @@
+<h1>Select worker</h1>
+
+{% for worker in workers %}
+    {% if action_type == "bos" %}
+        <a href="{% url "select_location" positive worker.id %}">{{ worker }}</a>
+    {% else %}
+        <a href="{% url "contribute_quos" positive worker.id %}">{{ worker }}</a>
+    {% endif %}
+{% endfor %}
