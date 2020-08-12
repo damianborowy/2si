@@ -94,14 +94,16 @@ class Employee(models.Model):
 class Contribution(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    rule = models.ForeignKey(Rule, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True)
-
-    def type(self):
-        return self.rule.category.get_type_display()
 
     def __str__(self):
         return f"{self.date} - {self.employee}"
+
+
+class ContributionRule(models.Model):
+    contribution = models.ForeignKey(Contribution, on_delete=models.CASCADE)
+    rule = models.ForeignKey(Rule, on_delete=models.CASCADE)
+    feedback_type = models.CharField(max_length=1, choices=[("P", "Positive"), ("C", "Constructive")], default="P")
 
 
 class Vacation(models.Model):

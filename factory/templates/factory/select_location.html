@@ -1,2 +1,5 @@
 <h1>Select location</h1>
-{{ worker_id }}
+
+{% for location in locations %}
+    <a href="{% url "contribute_bos" positive worker_id location.id %}">{{ location.name }}</a>
+{% endfor %}

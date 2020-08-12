@@ -1,7 +1,8 @@
 from adminsortable.admin import SortableAdmin
 from django.contrib import admin
 
-from factory.models import Category, Rule, Location, Settings, Employee, Contribution, Vacation, fix_order
+from factory.models import Category, Rule, Location, Settings, Employee, Contribution, Vacation, fix_order, \
+    ContributionRule
 
 
 @admin.register(Settings)
@@ -19,7 +20,7 @@ class EmployeeAdmin(admin.ModelAdmin):
 
 @admin.register(Contribution)
 class ContributionAdmin(admin.ModelAdmin):
-    list_display = ["date", "employee", "type", "rule", "location"]
+    list_display = ["date", "employee", "location"]
 
 
 @admin.register(Vacation)
@@ -60,3 +61,4 @@ class RuleAdmin(SortableAdmin):
 
 
 admin.site.register(Location)
+admin.site.register(ContributionRule)
