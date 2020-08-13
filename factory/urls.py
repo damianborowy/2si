@@ -7,5 +7,6 @@ urlpatterns = [
     path("location/<int:positive>/<int:worker_id>/", views.select_location, name="select_location"),
     path("contribute/<int:positive>/<int:worker_id>/<int:location_id>/", views.contribute_bos, name="contribute_bos"),
     path("contribute/<int:positive>/<int:worker_id>/", views.contribute_quos, name="contribute_quos"),
+    path("thanks/", views.thanks, name="thanks"),
     path("stats/", views.stats, name="stats"),
 ]

@@ -5,9 +5,8 @@ from factory.models import Rule, Employee, Location, Category, Contribution, Con
 
 def save_contribution(request, positive, worker_id, location_id=None):
     employee = Employee.objects.get(id=worker_id)
-    location = Location.objects.get(id=location_id)
-    contribution = Contribution(employee=employee, location=location) if location_id is not None else Contribution(
-        employee=employee)
+    location = Location.objects.get(id=location_id) if location_id is not None else None
+    contribution = Contribution(employee=employee, location=location)
     contribution.save()
 
     for rule_id in request.POST.getlist("rule"):
@@ -43,9 +42,9 @@ def contribute_bos(request, positive, worker_id, location_id):
     else:
         categories = Category.objects.filter(type="B")
 
-        return render(request, "factory/contribute_bos.html",
-                      {"worker_id": worker_id, "location_id": location_id,
-                       "categories": categories})
+        return render(request, "factory/contribute.html",
+                      {"positive": positive, "worker_id": worker_id, "location_id": location_id,
+                       "categories": categories, "action_type": "B"})
 
 
 def contribute_quos(request, positive, worker_id):
@@ -56,9 +55,9 @@ def contribute_quos(request, positive, worker_id):
     else:
         categories = Category.objects.filter(type="Q")
 
-        return render(request, "factory/contribute_quos.html",
+        return render(request, "factory/contribute.html",
                       {"positive": positive, "worker_id": worker_id,
-                       "categories": categories})
+                       "categories": categories, "action_type": "Q"})
 
 
 def thanks(request):

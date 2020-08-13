@@ -60,5 +60,9 @@ class RuleAdmin(SortableAdmin):
         fix_order()
 
 
+@admin.register(ContributionRule)
+class ContributionRuleAdmin(admin.ModelAdmin):
+    list_display = ["contribution", "rule", "feedback_type"]
+
+
 admin.site.register(Location)
-admin.site.register(ContributionRule)

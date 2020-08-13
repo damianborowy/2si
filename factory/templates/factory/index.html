@@ -1,7 +1,6 @@
 {% extends "factory/base.html" %}
 
 {% block content %}
-    <button class="btn btn-block">Foo</button>
     <a href="{% url "select_worker" 1 "bos" %}">Pochwała BOS</a>
     <a href="{% url "select_worker" 0 "bos" %}">Korygacja BOS</a>
     <a href="{% url "select_worker" 1 "quos" %}">Pochwała QUOS</a>

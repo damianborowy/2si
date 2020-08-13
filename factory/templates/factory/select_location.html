@@ -1,5 +1,9 @@
-<h1>Select location</h1>
+{% extends "factory/base.html" %}
 
-{% for location in locations %}
-    <a href="{% url "contribute_bos" positive worker_id location.id %}">{{ location.name }}</a>
-{% endfor %}
+{% block content %}
+    <h1>Select location</h1>
+
+    {% for location in locations %}
+        <a href="{% url "contribute_bos" positive worker_id location.id %}">{{ location.name }}</a>
+    {% endfor %}
+{% endblock %}
