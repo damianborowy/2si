@@ -30,6 +30,7 @@ class Category(SortableMixin):
     type = models.CharField(max_length=1, choices=[("B", "BOS"), ("Q", "QUOS")], default="B")
     name = models.CharField(max_length=128, default="")
     color = ColorField(default="#FFFFFF")
+    important_rule_color = ColorField(default="#FFFFFF")
     order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
     objects = CategoryManager()
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from factory.models import Rule, Employee, Location, Category, Contribution, ContributionRule
+from factory.models import Rule, Employee, Location, Category, Contribution, ContributionRule, Settings
 
 
 def save_contribution(request, positive, worker_id, location_id=None):
@@ -41,10 +41,11 @@ def contribute_bos(request, positive, worker_id, location_id):
         return redirect(to="thanks")
     else:
         categories = Category.objects.filter(type="B")
+        max_selections = Settings.objects.all()[0].max_selections
 
         return render(request, "factory/contribute.html",
                       {"positive": positive, "worker_id": worker_id, "location_id": location_id,
-                       "categories": categories, "action_type": "B"})
+                       "categories": categories, "action_type": "B", "max_selections": max_selections})
 
 
 def contribute_quos(request, positive, worker_id):
@@ -54,10 +55,11 @@ def contribute_quos(request, positive, worker_id):
         return redirect(to="thanks")
     else:
         categories = Category.objects.filter(type="Q")
+        max_selections = Settings.objects.all()[0].max_selections
 
         return render(request, "factory/contribute.html",
                       {"positive": positive, "worker_id": worker_id,
-                       "categories": categories, "action_type": "Q"})
+                       "categories": categories, "action_type": "Q", "max_selections": max_selections})
 
 
 def thanks(request):

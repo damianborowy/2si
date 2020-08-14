@@ -1,0 +1,32 @@
+a:hover {
+    text-decoration: none !important;
+}
+
+.home__buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.category-button {
+    padding: 1rem;
+    width: 250px;
+}
+
+.rule-button {
+    width: calc(100% - 20px);
+    padding: 1rem;
+    margin-left: 1rem;
+    color: #fff;
+}
+
+.rule-button:hover {
+    color: #fff;
+}
+
+.warning-triangle {
+    height: 42px;
+    width: 42px;
+    position: absolute;
+    right: 8px;
+}

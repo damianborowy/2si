@@ -1,41 +1,82 @@
 {% extends "factory/base.html" %}
+{% load static %}
 
 {% block content %}
-    <h1>Contribute BOS</h1>
+    <h2 class="mb-4 mt-4">Contribute BOS</h2>
 
-    {% for category in categories %}
-        <button onclick="handleCategoryChange({{ category.id }})">{{ category.name }}</button>
-    {% endfor %}
+    <div id="alert" class="alert alert-danger" role="alert">
+        Możesz wybrać maksymalnie do {{ max_selections }} reguł
+    </div>
 
-    <form class="form" action="" method="post">
-        <input type="hidden" name="positive" value="{{ positive }}">
-        <input type="hidden" name="action_type" value="{{ action_type }}">
-        <input type="hidden" name="worker_id" value="{{ worker_id }}">
-        {% if action_type == "B" %}
-            <input type="hidden" name="location_id" value="{{ location_id }}">
-        {% endif %}
-        {% csrf_token %}
-        <div id="categories">
+    <div class="d-flex">
+        <div class="d-flex flex-column mr-4">
             {% for category in categories %}
-                <div id="{{ category.id }}">
-                    {% for rule in category.rule_set.all %}
-                        <input class="form-check-input" name="rule" type="checkbox" value="{{ rule.id }}"
-                               id="{{ rule.id }}">
-                        <label class="form-check-label" for="{{ rule.id }}">{{ rule }}</label>
-                    {% endfor %}
-                </div>
+                <button class="btn m-1 border text-light category-button" style="background-color: {{ category.color }}"
+                        onclick="handleCategoryChange({{ category.id }})">{{ category.name }}</button>
             {% endfor %}
         </div>
-        <button class="btn btn-primary mb-2" type="submit">Submit</button>
-    </form>
-
+        <div class="w-100">
+            <form class="form" action="" method="post">
+                <input type="hidden" name="positive" value="{{ positive }}">
+                <input type="hidden" name="action_type" value="{{ action_type }}">
+                <input type="hidden" name="worker_id" value="{{ worker_id }}">
+                {% if action_type == "B" %}
+                    <input type="hidden" name="location_id" value="{{ location_id }}">
+                {% endif %}
+                {% csrf_token %}
+                <div id="categories" class="w-100">
+                    {% for category in categories %}
+                        <div id="{{ category.id }}" class="flex-column">
+                            <h4 class="mb-4">{{ category.name }}</h4>
+                            {% for rule in category.rule_set.all %}
+                                <div class="m-1 d-flex justify-content-center align-items-center">
+                                    <input name="rule" type="checkbox"
+                                           value="{{ rule.id }}"
+                                           id="{{ rule.id }}">
+                                    {% if rule.is_important %}
+                                        <div class="position-relative d-flex w-100 align-items-center">
+                                            <label class="form-check-label btn rule-button w-100"
+                                                   for="{{ rule.id }}"
+                                                   style="background-color: {{ category.important_rule_color }}">{{ rule }}</label>
+                                            <img class="warning-triangle"
+                                                 src="{% static "factory/icons/exclamation-triangle.svg" %}"
+                                                 alt="Warning triangle">
+                                        </div>
+                                    {% else %}
+                                        <label class="form-check-label btn rule-button"
+                                               for="{{ rule.id }}"
+                                               style="background-color: {{ category.color }}">{{ rule }}</label>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <button class="btn btn-primary mt-4 p-3" type="submit">Zatwierdź</button>
+            </form>
+        </div>
+    </div>
     <script>
+        document.getElementById("alert").style.display = "none";
+
         function handleCategoryChange(newCat) {
             const categories = document.getElementById("categories");
 
             for (let category of categories.children)
-                category.style.display = category.id == newCat ? "block" : "none";
+                category.style.display = category.id == newCat ? "flex" : "none";
         }
+
+        $("input[type=checkbox]").on("change", e => {
+            if ($("input[name='rule']:checked").length > {{ max_selections }}) {
+                e.target.checked = false;
+                const alert = document.getElementById("alert");
+                alert.style.display = "block";
+
+                setTimeout(() => {
+                    alert.style.display = "none";
+                }, 3000)
+            }
+        })
 
         handleCategoryChange({{ categories.0.id }});
     </script>
