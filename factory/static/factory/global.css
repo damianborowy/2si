@@ -30,3 +30,14 @@ a:hover {
     position: absolute;
     right: 8px;
 }
+
+.app-button {
+    padding: 1rem;
+    width: 100%;
+}
+
+.selection-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+}

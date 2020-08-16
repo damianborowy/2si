@@ -1,13 +1,23 @@
 {% extends "factory/base.html" %}
 
 {% block content %}
-    <h1>Select worker</h1>
+    <h2 class="mb-5 mt-5">Wybierz pracownika</h2>
 
-    {% for worker in workers %}
-        {% if action_type == "bos" %}
-            <a href="{% url "select_location" positive worker.id %}">{{ worker }}</a>
-        {% else %}
-            <a href="{% url "contribute_quos" positive worker.id %}">{{ worker }}</a>
-        {% endif %}
-    {% endfor %}
+    <div class="selection-container">
+        {% for worker in workers %}
+            {% if action_type == "bos" %}
+                <a href="{% url "select_location" positive worker.id %}">
+                    <button class="btn btn-primary app-button">
+                        {{ worker }}
+                    </button>
+                </a>
+            {% else %}
+                <a href="{% url "contribute_quos" positive worker.id %}">
+                    <button class="btn btn-primary app-button">
+                        {{ worker }}
+                    </button>
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endblock %}

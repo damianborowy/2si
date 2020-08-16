@@ -1,19 +1,22 @@
 {% extends "factory/base.html" %}
 
 {% block content %}
+    <h2 class="mt-5">Witaj w systemie XYZ</h2>
+    <p>Wybierz interesującą Cię akcję:</p>
+
     <div class="d-flex justify-content-center mt-5">
-        <div class="home__buttons w-50">
+        <div class="home__buttons w-75">
             <a href="{% url "select_worker" 1 "bos" %}">
-                <button class="btn btn-success p-2 w-100">Pochwała BOS</button>
+                <button class="btn btn-success p-3 w-100">Pochwała BOS</button>
             </a>
             <a href="{% url "select_worker" 0 "bos" %}">
-                <button class="btn btn-danger p-2 w-100">Korygacja BOS</button>
+                <button class="btn btn-danger p-3 w-100">Korygacja BOS</button>
             </a>
             <a href="{% url "select_worker" 1 "quos" %}">
-                <button class="btn btn-success p-2 w-100">Pochwała QUOS</button>
+                <button class="btn btn-success p-3 w-100">Pochwała QUOS</button>
             </a>
             <a href="{% url "select_worker" 0 "quos" %}">
-                <button class="btn btn-danger p-2 w-100">Korygacja QUOS</button>
+                <button class="btn btn-danger p-3 w-100">Korygacja QUOS</button>
             </a>
         </div>
     </div>

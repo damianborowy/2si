@@ -1,9 +1,15 @@
 {% extends "factory/base.html" %}
 
 {% block content %}
-    <h1>Select location</h1>
+    <h2 class="mb-5 mt-5">Wybierz lokalizację</h2>
 
-    {% for location in locations %}
-        <a href="{% url "contribute_bos" positive worker_id location.id %}">{{ location.name }}</a>
-    {% endfor %}
+    <div class="selection-container">
+        {% for location in locations %}
+            <a href="{% url "contribute_bos" positive worker_id location.id %}">
+                <button class="btn btn-primary app-button">
+                    {{ location.name }}
+                </button>
+            </a>
+        {% endfor %}
+    </div>
 {% endblock %}
