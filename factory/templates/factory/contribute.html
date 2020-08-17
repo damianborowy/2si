@@ -13,8 +13,11 @@
     <div class="d-flex">
         <div class="d-flex flex-column mr-4">
             {% for category in categories %}
-                <button class="btn m-1 border text-light category-button" style="background-color: {{ category.color }}"
-                        onclick="handleCategoryChange({{ category.id }})">{{ category.name }}</button>
+                <button class="btn m-1 border text-light category-button"
+                        style="background-color: {{ category.color }}"
+                        onclick="handleCategoryChange({{ category.id }})">
+                    {{ category.name }}
+                </button>
             {% endfor %}
         </div>
         <div class="w-100">
@@ -39,22 +42,26 @@
                                         <div class="position-relative d-flex w-100 align-items-center">
                                             <label class="form-check-label btn rule-button w-100"
                                                    for="{{ rule.id }}"
-                                                   style="background-color: {{ category.important_rule_color }}">{{ rule }}</label>
+                                                   style="background-color: {{ category.important_rule_color }}">
+                                                {{ rule }}
+                                            </label>
                                             <img class="warning-triangle"
                                                  src="{% static "factory/icons/exclamation-triangle.svg" %}"
                                                  alt="Warning triangle">
                                         </div>
                                     {% else %}
-                                        <label class="form-check-label btn rule-button"
+                                        <label class="form-check-label btn rule-button w-100"
                                                for="{{ rule.id }}"
-                                               style="background-color: {{ category.color }}">{{ rule }}</label>
+                                               style="background-color: {{ category.color }}">
+                                            {{ rule }}
+                                        </label>
                                     {% endif %}
                                 </div>
                             {% endfor %}
                         </div>
                     {% endfor %}
                 </div>
-                <button class="btn btn-primary mt-4 p-3" type="submit">Zatwierdź</button>
+                <button class="btn btn-primary mt-4 p-3 float-right" type="submit">Zatwierdź</button>
             </form>
         </div>
     </div>

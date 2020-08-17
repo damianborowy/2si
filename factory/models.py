@@ -5,7 +5,12 @@ from django.db import models
 
 
 def fix_order():
-    categories = Category.objects.all()
+    fix_categories("B")
+    fix_categories("Q")
+
+
+def fix_categories(cat_type):
+    categories = Category.objects.filter(type=cat_type)
     rule_counter = 1
     category_counter = 1
 
@@ -28,7 +33,7 @@ class CategoryManager(models.Manager):
 
 class Category(SortableMixin):
     type = models.CharField(max_length=1, choices=[("B", "BOS"), ("Q", "QUOS")], default="B")
-    name = models.CharField(max_length=128, default="")
+    name = models.CharField(max_length=256, default="")
     color = ColorField(default="#FFFFFF")
     important_rule_color = ColorField(default="#FFFFFF")
     order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
@@ -51,7 +56,7 @@ class RuleManager(models.Manager):
 
 
 class Rule(SortableMixin):
-    name = models.CharField(max_length=128, default="")
+    name = models.CharField(max_length=1024, default="")
     category = SortableForeignKey(Category, on_delete=models.CASCADE)
     order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
     is_important = models.BooleanField(default=False)

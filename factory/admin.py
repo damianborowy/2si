@@ -31,6 +31,7 @@ class VacationAdmin(admin.ModelAdmin):
 @admin.register(Category)
 class CategoryAdmin(SortableAdmin):
     list_display = ["type", "order", "name"]
+    ordering = ["type", "order"]
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
@@ -46,7 +47,7 @@ class CategoryAdmin(SortableAdmin):
 
 @admin.register(Rule)
 class RuleAdmin(SortableAdmin):
-    list_display = ["type", "order", "name"]
+    list_display = ["type", "order", "name", "category"]
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)

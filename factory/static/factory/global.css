@@ -10,12 +10,11 @@ a:hover {
 
 .category-button {
     padding: 1rem;
-    width: 250px;
+    width: 300px;
 }
 
 .rule-button {
-    width: calc(100% - 20px);
-    padding: 1rem;
+    padding: 1rem 4rem;
     margin-left: 1rem;
     color: #fff;
 }
