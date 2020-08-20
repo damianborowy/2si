@@ -40,3 +40,22 @@ a:hover {
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
 }
+
+.stats-button {
+    grid-column: span 2;
+}
+
+.stats__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.stats__grid > * {
+    border-radius: 8px;
+    border: 1px solid lightgray;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
